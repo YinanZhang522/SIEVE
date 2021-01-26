@@ -1,8 +1,8 @@
-#' Fatch the variable genes of cell subsets by different methods.
-#' @name fatch_HVGs
-#' @usage fatch_HVGs(object,celllist,method=method,n=50)
+#' Fetch the variable genes of cell subsets by different methods.
+#' @name fetch_HVGs
+#' @usage fetch_HVGs(object,celllist,method=method,n=50)
 #' @param object A Seurat object.
-#' @param celllist A matrix returned from fatch_cells
+#' @param celllist A matrix returned from fetch_cells
 #' @param method the method used to fatch the variable genes,can be chosen from "schs"(singleCellHaystack),"scmap","scran","ROGUE".
 #' @param n The number of feature genes.The default value of n is set to 2000.
 
@@ -10,8 +10,8 @@
 #' @return A list of HVGs.
 #' @export
 
-#' @examples genelist<-fatch_HVGs(object,celllist,method=method,n=2000)
-fatch_HVGs<-function(object,celllist,method=c("schs","scmap","scran","ROGUE"),n=2000){
+#' @examples genelist<-fetch_HVGs(object,celllist,method=method,n=2000)
+fetch_HVGs<-function(object,celllist,method=c("schs","scmap","scran","ROGUE"),n=2000){
     celllist<-celllist
     X<-object
     X@meta.data$name<-rownames(X@meta.data)
