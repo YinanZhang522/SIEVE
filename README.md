@@ -1,21 +1,20 @@
 # Overview
-SIEVE is a strategy used for select highly Variable genes from single-cell RNA Seq data, based on random sampling for all single cells in a scRNA-seq dataset, SIEVE provides the reproducibility estimation for HVGs selection method and screens robust HVGs for the following analysis.
+   SIEVE is a strategy used for select highly Variable genes from single-cell RNA Seq data, based on random sampling for all single cells in a scRNA-seq dataset, SIEVE provides the reproducibility estimation for HVGs selection method and screens robust HVGs for the following analysis.
 
 # Installing SIEVE
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("YinanZhang522/SIEVE")
 
 # Usage
-   Fetch_cells
-#' Find the overlapped genes of gene sets defined by different method.
+   Fetch_cells:Find the overlapped genes of gene sets defined by different method.
 
-#' @usage fetch_cells(expr,ratio=0.7,n=50)
-#' @param expr The expression dataframe. Rows should be genes and columns should be cells.
-#' @param ratio the Proportion of cell subset.The default value of ratio is set to 0.7, but can also be set to other values between 0 to 1.
-#' @param n The times of subsampling.The default value of n is set to 50.
+@usage fetch_cells(expr,ratio=0.7,n=50)
+@param expr The expression dataframe. Rows should be genes and columns should be cells.
+@param ratio the Proportion of cell subset.The default value of ratio is set to 0.7, but can also be set to other values between 0 to 1.
+@param n The times of subsampling.The default value of n is set to 50.
 
-#' @return A list of random cell subsets.
-#' @export
+@return A list of random cell subsets.
+@export
 
 #' @examples celllist<-fetch_cells(expr,ratio=0.7,n=50)
 
