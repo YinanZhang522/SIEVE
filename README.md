@@ -1,7 +1,5 @@
 # Overview
-		SIEVE is a strategy used for select highly Variable genes from single-cell RNA Seq data, 
-		based on random sampling for all single cells in a scRNA-seq dataset, SIEVE provides the reproducibility estimation for HVGs selection method 
-		and screens robust HVGs for the following analysis.
+   SIEVE is a strategy used for select highly Variable genes from single-cell RNA Seq data, based on random sampling for all single cells in a scRNA-seq dataset, SIEVE provides the reproducibility estimation for HVGs selection method and screens robust HVGs for the following analysis.
 
 # Installing SIEVE
 		if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
