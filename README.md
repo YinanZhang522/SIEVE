@@ -6,7 +6,7 @@
 		devtools::install_github("YinanZhang522/SIEVE")
 
 # Usage
-Fetch_cells: It's a function using for fetch cell subsets with the random sampling strategy. 
+#Fetch_cells: It's a function using for fetch cell subsets with the random sampling strategy. 
 Users should provide a gene expression dataframe.Rows should be genes and columns should be cells. 
 		You can choose the proportion of the cell subset.To ensure the accuracy of subsequent analysis results, 
 	you should consider the size and the composition of your dataset, to make sure that the proportion of the cell subset can covered every cell type, 
@@ -19,7 +19,7 @@ Users should provide a gene expression dataframe.Rows should be genes and column
 		param n: The times of subsampling.The default value of n is set to 50.  
 
   
-		Fetch_HVGs: It's a function using for fetch the variable genes of cell subsets by different methods.
+#Fetch_HVGs: It's a function using for fetch the variable genes of cell subsets by different methods.
 		Users should provide a gene expression dataframe, both raw counts and normalized data are supported. 
 		Rows should be genes and columns should be cells. 
 		The feature selecting methods can be choosing from singleCellHaystack, Scmap, Scran, ROGUE, M3Drop, Seurat(vst,disp,SCTransform).
@@ -36,7 +36,7 @@ Users should provide a gene expression dataframe.Rows should be genes and column
 		param n: The number of feature genes.The default value of n is set to 2000.
 
 
-		SIEVE: It's a function using for find the high frequency genes of gene sets defined by different method. 
+#SIEVE: It's a function using for find the high frequency genes of gene sets defined by different method. 
 		Users should provide a genelist matrix.Rows should be genes and columns should be different batches. 
 		You can set the minimum number of repetitions of a gene. 
 
