@@ -6,8 +6,8 @@
 		devtools::install_github("YinanZhang522/SIEVE")
 
 # Usage
-		Fetch_cells: It's a function using for fetch cell subsets with the random sampling strategy. 
-		Users should provide a gene expression dataframe.Rows should be genes and columns should be cells. 
+Fetch_cells: It's a function using for fetch cell subsets with the random sampling strategy. 
+Users should provide a gene expression dataframe.Rows should be genes and columns should be cells. 
 		You can choose the proportion of the cell subset.To ensure the accuracy of subsequent analysis results, 
 	you should consider the size and the composition of your dataset, to make sure that the proportion of the cell subset can covered every cell type, 
 	the default value of ratio is set to 0.7, but can also be set to other values between 0 to 1. 
