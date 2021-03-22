@@ -1,5 +1,5 @@
-\name{fetch_HVGs}
-\alias{fetch_HVGs}
+\name{fetch_HVGs_seurat}
+\alias{fetch_HVGs_seurat}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 %%  ~~function to do ... ~~
@@ -8,12 +8,12 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-fetch_HVGs(dataframe, celllist, method = c("schs", "Scmap", "Scran", "ROGUE", "Seurat_sct", "M3Drop", "Seurat_vst", "Seurat_disp"), n = 2000)
+fetch_HVGs_seurat(object, celllist, method = c("schs", "Scmap", "Scran", "ROGUE", "Seurat_sct", "M3Drop", "Seurat_vst", "Seurat_disp"), n = 2000)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataframe}{
-%%     ~~Describe \code{dataframe} here~~
+  \item{object}{
+%%     ~~Describe \code{object} here~~
 }
   \item{celllist}{
 %%     ~~Describe \code{celllist} here~~
@@ -56,21 +56,24 @@ fetch_HVGs(dataframe, celllist, method = c("schs", "Scmap", "Scran", "ROGUE", "S
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function (dataframe, celllist, method = c("schs", "Scmap", "Scran", 
+function (object, celllist, method = c("schs", "Scmap", "Scran", 
     "ROGUE", "Seurat_sct", "M3Drop", "Seurat_vst", "Seurat_disp"), 
     n = 2000) 
 {
     celllist <- celllist
-    X <- dataframe
+    X <- object
+    X@meta.data$name <- rownames(X@meta.data)
     genelist <- matrix(nrow = n, ncol = ncol(celllist))
     for (i in 1:ncol(celllist)) {
-        X.subset.data = X[, colnames(X) \%in\% celllist[, i]]
+        X.subset = subset(X, name \%in\% celllist[, i])
+        X.subset = Seurat::NormalizeData(X.subset, verbose = FALSE)
+        X.subset = Seurat::ScaleData(X.subset, verbose = FALSE)
         if (method == "ROGUE") {
-            rogue_norm <- ROGUE::SE_fun(X.subset.data)
+            rogue_norm <- ROGUE::SE_fun(X.subset@assays$RNA@data)
             genelist[, i] = rogue_norm$Gene[c(1:n)]
         }
         else if (method == "scmap") {
-            sce <- SingleCellExperiment::SingleCellExperiment(list(counts = X.subset.data))
+            sce <- SingleCellExperiment::SingleCellExperiment(list(counts = X.subset@assays$RNA@counts))
             SingleCellExperiment::logcounts(sce) <- log2(SingleCellExperiment::counts(sce) + 
                 1)
             rowData(sce)$feature_symbol <- rownames(sce)
@@ -81,52 +84,38 @@ function (dataframe, celllist, method = c("schs", "Scmap", "Scran",
                 "TRUE"]
         }
         else if (method == "scran") {
-            scran_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = X.subset.data))
+            scran_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = X.subset@assays$RNA@counts))
             scran_sce <- scran::computeSumFactors(scran_sce)
             scran_sce <- scater::logNormCounts(scran_sce)
             stats <- scran::modelGeneVar(scran_sce)
             genelist[, i] <- scran::getTopHVGs(stats, n = n)
         }
         else if (method == "schs") {
+            X.subset = Seurat::FindVariableFeatures(X.subset, 
+                selection.method = "vst", nfeatures = n, verbose = FALSE)
             X.subset = Seurat::RunPCA(X.subset, npcs = 30, verbose = FALSE)
-            detection = t(X.subset.data > 0)
-            SCHS <- singleCellHaystack::haystack(X.subset.data, 
-                detection = detection)
-            genelist[, i] <- show_result_haystack(SCHS, n = n)
+            SCHS <- singleCellHaystack::haystack(X.subset, assay = "RNA")
+            genelist[, i] <- singleCellHaystack::show_result_haystack(SCHS, 
+                n = n)
         }
         else if (method == "M3Drop") {
-            MB <- M3Drop::BrenneckeGetVariableGenes(X.subset.data, 
+            abc_MB <- M3Drop::BrenneckeGetVariableGenes(X.subset@assays$RNA@counts, 
                 fdr = 0.5)
-            genelist[, i] <- MB$Gene[c(1:n)]
+            genelist[, i] <- abc_MB$Gene[c(1:n)]
         }
         else if (method == "Seurat_sct") {
-            X.subset = Seurat::CreateSeuratObject(counts = X.subset.data, 
-                project = "hspc", min.cells = 50, min.features = 1000, 
-                names.delim = ".")
-            X.subset <- Seurat::NormalizeData(X.subset)
-            X.subset <- Seurat::ScaleData(X.subset)
-            X.subset <- sctransform::SCTransform(X.subset, assay = "RNA", 
+            X.SCT <- sctransform::SCTransform(X.subset, assay = "RNA", 
                 variable.features.n = n)
-            genelist[, i] = X.subset@assays$SCT@var.features
+            genelist[, i] = X.SCT@assays$SCT@var.features
         }
         else if (method == "Seurat_vst") {
-            X.subset = Seurat::CreateSeuratObject(counts = X.subset.data, 
-                project = "hspc", min.cells = 50, min.features = 1000, 
-                names.delim = ".")
-            X.subset <- Seurat::NormalizeData(X.subset)
-            X.subset <- Seurat::ScaleData(X.subset)
-            X.subset <- Seurat::FindVariableFeatures(X.subset, 
-                selection.method = "vst", nfeatures = n)
-            genes.use <- X.subset@assays$RNA@var.features
+            X.subset = Seurat::FindVariableFeatures(X.subset, 
+                selection.method = "vst", nfeatures = n, verbose = FALSE)
+            genelist[, i] <- X.subset@assays$RNA@var.features
         }
         else if (method == "Seurat_disp") {
-            X.subset = Seurat::CreateSeuratObject(counts = X.subset.data, 
-                project = "hspc", min.cells = 50, min.features = 1000, 
-                names.delim = ".")
-            X.subset <- Seurat::NormalizeData(X.subset)
-            X.subset <- Seurat::ScaleData(X.subset)
-            X.subset <- Seurat::FindVariableFeatures(X.subset, 
-                selection.method = "disp", nfeatures = n)
+            X.subset = Seurat::FindVariableFeatures(X.subset, 
+                selection.method = "disp", nfeatures = n, verbose = FALSE)
             genelist[, i] <- X.subset@assays$RNA@var.features
         }
     }
