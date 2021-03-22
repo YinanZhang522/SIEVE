@@ -8,5 +8,5 @@ Description: identify highly variable genes for single-cell RNA sequencing data.
 Encoding: UTF-8
 LazyData: true
 Imports:
-     Seurat,singleCellHaystack,ROGUE,SingleCellExperiment,scmap,scran,scater
+     Seurat,singleCellHaystack,ROGUE,SingleCellExperiment,scmap,scran,scater,M3Drop,sctransform
 RoxygenNote: 7.1.1
