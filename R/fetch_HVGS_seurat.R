@@ -3,7 +3,7 @@
 #' @usage fetch_HVGs_seurat(object,celllist,method=method,n=50)
 #' @param object A Seurat object.
 #' @param celllist A matrix returned from fetch_cells
-#' @param method the method used to fetch the variable genes,can be chosen from "schs"(singleCellHaystack),"scmap","scran","ROGUE".
+#' @param method the method used to fetch the variable genes,can be chosen from "schs"(singleCellHaystack),"scmap","scran","ROGUE","Seurat_sct","M3Drop","Seurat_vst","Seurat_disp".
 #' @param n The number of feature genes.The default value of n is set to 2000.
 
 
