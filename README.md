@@ -19,15 +19,15 @@ Users should provide a gene expression dataframe.Rows should be genes and column
 		param n: The times of subsampling.The default value of n is set to 50.  
 
   
-Fetch_HVGs: It's a function using for fetch the variable genes of cell subsets by different methods.
-		Users should provide a gene expression dataframe, both raw counts and normalized data are supported. 
+Fetch_HVGs(Fetch_HVGs_seurat): It's a function using for fetch the variable genes of cell subsets by different methods.
+		Users should provide a gene expression dataframe(or a seurat object), both raw counts and normalized data are supported. 
 		Rows should be genes and columns should be cells. 
 		The feature selecting methods can be choosing from singleCellHaystack, Scmap, Scran, ROGUE, M3Drop, Seurat(vst,disp,SCTransform).
 		According to the type of data, 
 	if your data is a raw counts matrix, method should be chosen from "M3Drop","ROGUE","Scran","Scmap".
 	If your data is a normalized matrix, method should be chosen from "schs"(singleCellHaystack),"Seurat_vst","Seurat_disp","Seurat_sct","ROGUE".
 				
-		usage fetch_HVGs(object,celllist,method=method,n=50)
+		usage fetch_HVGs(dataframe,celllist,method=method,n=50)
 		param dataframe: A gene expression dataframe, can be raw counts or normalized data, rows should be genes, columns should be cells.
 		param celllist: A matrix returned from fetch_cells
 		param method: the method used to fetch the variable genes,
